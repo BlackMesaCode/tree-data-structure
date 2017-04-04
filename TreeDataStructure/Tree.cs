@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TreeDataStructure
 {
-    public class Tree<T> where T: IComparable<T>
+    public class Tree<T>
     {
 
         public Tree(T data, Tree<T> parent = null)
@@ -15,7 +15,6 @@ namespace TreeDataStructure
 
             Children = new LinkedList<Tree<T>>();
             ChildrenDataNodeMap = new Dictionary<T, Tree<T>>();
-            
         }
 
         public Tree<T> AddChild(T value)
@@ -59,13 +58,13 @@ namespace TreeDataStructure
             }
         }
 
-        // Breadth First Search
+        
         public IEnumerable<Tree<T>> GetDescendants(Tree<T> nodeToSearch = null)
         {
             HashSet<Tree<T>> visitedNodes = new HashSet<Tree<T>>();
 
             // populate queue
-            var queue = new Queue<Tree<T>>();
+            var queue = new Queue<Tree<T>>();  // Breadth First Search
             queue.Enqueue(this);
 
             // traversing queue until no more new childs are enqueued
@@ -85,7 +84,7 @@ namespace TreeDataStructure
             
         }
 
-        public Tree<T> SearchDescendants(Tree<T> nodeToSearch = null)
+        public Tree<T> SearchInDescendants(Tree<T> nodeToSearch = null)
         {
             HashSet<Tree<T>> visitedNodes = new HashSet<Tree<T>>();
 
@@ -113,7 +112,7 @@ namespace TreeDataStructure
         }
 
 
-        public Tree<T> SearchDescendants(T data)
+        public Tree<T> SearchInDescendants(T data)
         {
             HashSet<Tree<T>> visitedNodes = new HashSet<Tree<T>>();
 
@@ -141,23 +140,6 @@ namespace TreeDataStructure
 
             return null;
         }
-
-
-
-        //public IEnumerable<Tree<T>> GetAncestors()
-        //{
-
-        //}
-
-        //public IEnumerable<Tree<T>> GetDescendants()
-        //{
-
-        //}
-
-        //public bool Compare<T>(T x, T y)
-        //{
-        //    return EqualityComparer<T>.Default.Equals(x, y);
-        //}
 
 
         public T Data { get; private set; }
