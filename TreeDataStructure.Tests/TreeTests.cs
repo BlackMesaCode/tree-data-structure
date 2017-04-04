@@ -51,15 +51,41 @@ namespace TreeDataStructure.Tests
         [InlineData("South America")] // leaf
         [InlineData("America")]
         [InlineData("World")] // root
-        public void SearchDescendants_CountryTree(string data)
+        public void SearchInDescendants_ReturnsNodeWithData(string data)
         {
-            var node = CountryTree.SearchDescendants(data);
+            var node = CountryTree.SearchInDescendants(data);
 
             Assert.Equal(node.Data, data);
         }
 
+
+        [Theory]
+        [InlineData("World", 0)]
+        [InlineData("Europe", 1)]
+        [InlineData("South America", 2)]
+        [InlineData("Paris", 3)]
+        public void GetAscendants_ReturnsCorrectCount(string data, int numberOfAncestors)
+        {
+            var node = CountryTree.SearchInDescendants(data);
+
+            Assert.Equal(node.GetAncestors().Count(), numberOfAncestors);
+        }
+
+        [Theory]
+        [InlineData("World", 0)]
+        [InlineData("Europe", 1)]
+        [InlineData("South America", 2)]
+        [InlineData("Paris", 3)]
+        public void Level_ReturnsCorrectCount(string data, int level)
+        {
+            var node = CountryTree.SearchInDescendants(data);
+
+            Assert.Equal(node.Level, level);
+        }
+
+
         [Fact]
-        public void GetDescendants_CountryTree()
+        public void GetDescendants_ReturnsCorrectCount()
         {
             var descendants = CountryTree.GetDescendants(CountryTree);
             var count = 0;
