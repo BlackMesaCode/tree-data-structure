@@ -126,18 +126,5 @@ namespace TreeDataStructure.Tests
             Assert.False(animals.Children.Contains(ape));
         }
 
-
-        [Fact]
-        public void RemoveChild_GivenData_RemovesFirstNodeWithAccordingDataFromChildrenCollection()
-        {
-            var animals = new Tree<string>("Animals");
-            var lion = animals.AddChild("lion");
-            var ape = animals.AddChild("ape");
-
-            animals.RemoveChild(ape);
-
-            Assert.False(animals.Children.Contains(ape));
-        }
-
     }
 }
