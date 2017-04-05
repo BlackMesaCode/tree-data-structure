@@ -14,26 +14,55 @@ namespace TreeDataStructure
             Parent = parent;
 
             Children = new LinkedList<Tree<T>>();
-            ChildrenDataNodeMap = new Dictionary<T, Tree<T>>();
+            ChildrenDataNodeMap = new Dictionary<T, dynamic>();
         }
 
 
         public virtual Tree<T> AddChild(T value)
         {
             var newChild = new Tree<T>(value, this);
+            AddValueToChildrenDataNodeMap(value, newChild);
             Children.Add(newChild);
             return newChild;
         }
 
 
-        public virtual void RemoveChild(Tree<T> node) 
-            => Children.Remove(node);
+        //IEnumerable<T> SearchInChildren(T value)
+        //{
+        //    using the ChildrenDataNodeMap to boost children search
+        //}
+
+
+        private void AddValueToChildrenDataNodeMap(T value, Tree<T> node)
+        {
+            if (ChildrenDataNodeMap.ContainsKey(value))
+            {
+                if (ChildrenDataNodeMap[value].GetType() == typeof(ICollection<T>)) // in case we already created a bucket
+                {
+                    (ChildrenDataNodeMap[value] as ICollection<Tree<T>>).Add(node);
+                }
+                else // lets create a bucket in case of an hash collision
+                {
+                    Tree<T> temp = ChildrenDataNodeMap[value];
+                    ChildrenDataNodeMap[value] = new LinkedList<Tree<T>>();
+                    (ChildrenDataNodeMap[value] as LinkedList<Tree<T>>).Append(temp);
+                }
+            }
+            ChildrenDataNodeMap[value] = node;
+        }
+
+
+        public virtual void RemoveChild(Tree<T> node)
+        {
+            Children.Remove(node);
+            ChildrenDataNodeMap.Remove(node.Data);
+        }
 
 
         public virtual void RemoveChild(T data)
         {
             var node = ChildrenDataNodeMap[data];
-            Children.Remove(node);
+            RemoveChild(node);
         }
 
 
@@ -133,7 +162,7 @@ namespace TreeDataStructure
         public virtual T Data { get; private set; }
         public virtual Tree<T> Parent { get; private set; }
         public virtual ICollection<Tree<T>> Children { get; set; }
-        public IDictionary<T, Tree<T>> ChildrenDataNodeMap { get; set; }
+        public IDictionary<T, dynamic> ChildrenDataNodeMap { get; set; }
 
         public virtual bool IsRoot => Parent == null;
         public virtual bool IsLeaf => !Children.Any();
