@@ -48,9 +48,9 @@ namespace TreeDataStructure.Tests
 
         [Theory]
         [InlineData("Europe")]
-        [InlineData("South America")] // leaf
+        [InlineData("South America")]
         [InlineData("America")]
-        [InlineData("World")] // root
+        [InlineData("World")]
         public void SearchInDescendants_ReturnsNodeWithData(string data)
         {
             var node = CountryTree.SearchInDescendants(data);
