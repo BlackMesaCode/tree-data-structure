@@ -17,6 +17,7 @@ namespace TreeDataStructure
             ChildrenDataNodeMap = new Dictionary<T, Tree<T>>();
         }
 
+
         public virtual Tree<T> AddChild(T value)
         {
             var newChild = new Tree<T>(value, this);
@@ -24,10 +25,10 @@ namespace TreeDataStructure
             return newChild;
         }
 
-        public virtual void RemoveChild(Tree<T> node)
-        {
-            Children.Remove(node);
-        }
+
+        public virtual void RemoveChild(Tree<T> node) 
+            => Children.Remove(node);
+
 
         public virtual void RemoveChild(T data)
         {
@@ -35,18 +36,14 @@ namespace TreeDataStructure
             Children.Remove(node);
         }
 
-        public IDictionary<T, Tree<T>> ChildrenDataNodeMap { get; set; }
+
+        public virtual Tree<T> SearchAncestors(Tree<T> node) 
+            => GetAncestors().SingleOrDefault(ancestor => ancestor == node);
 
 
-        public virtual Tree<T> SearchAncestors(Tree<T> node)
-        {
-            return GetAncestors().SingleOrDefault(ancestor => ancestor == node);
-        }
+        public virtual Tree<T> SearchAncestors(T data) 
+            => GetAncestors().SingleOrDefault(ancestor => ancestor.Data.Equals(data));
 
-        public virtual Tree<T> SearchAncestors(T data)
-        {
-            return GetAncestors().SingleOrDefault(ancestor => ancestor.Data.Equals(data));
-        }
 
         public virtual IEnumerable<Tree<T>> GetAncestors()
         {
@@ -85,8 +82,20 @@ namespace TreeDataStructure
         }
 
 
-        private Tree<T> CompareWithNode(Tree<T> nodeToSearch, Tree<T> currentNode) => currentNode.Equals(nodeToSearch) ? currentNode : null;
-        private Tree<T> CompareWithData(T dataToSearch, Tree<T> currentNode) => dataToSearch.Equals(currentNode.Data) ? currentNode : null;
+        public virtual Tree<T> SearchInDescendants(Tree<T> nodeToSearch = null)
+            => SearchInDescendants<Tree<T>>(CompareWithNode, nodeToSearch);
+
+
+        public virtual Tree<T> SearchInDescendants(T data)
+            => SearchInDescendants<T>(CompareWithData, data);
+
+
+        private Tree<T> CompareWithNode(Tree<T> nodeToSearch, Tree<T> currentNode) 
+            => currentNode.Equals(nodeToSearch) ? currentNode : null;
+
+
+        private Tree<T> CompareWithData(T dataToSearch, Tree<T> currentNode) 
+            => dataToSearch.Equals(currentNode.Data) ? currentNode : null;
 
 
         private Tree<T> SearchInDescendants<TSearchTarget>(
@@ -114,7 +123,6 @@ namespace TreeDataStructure
                         queue.Enqueue(child);
                         visitedNodes.Add(child);
                     }
-
                 }
             }
 
@@ -122,19 +130,11 @@ namespace TreeDataStructure
         }
 
 
-        public virtual Tree<T> SearchInDescendants(Tree<T> nodeToSearch = null) 
-            => SearchInDescendants<Tree<T>>(CompareWithNode, nodeToSearch);
-
-
-        public virtual Tree<T> SearchInDescendants(T data) 
-            => SearchInDescendants<T>(CompareWithData, data);
-
-
-
         public virtual T Data { get; private set; }
         public virtual Tree<T> Parent { get; private set; }
         public virtual ICollection<Tree<T>> Children { get; set; }
-        
+        public IDictionary<T, Tree<T>> ChildrenDataNodeMap { get; set; }
+
         public virtual bool IsRoot => Parent == null;
         public virtual bool IsLeaf => !Children.Any();
         public virtual int Level => IsRoot ? 0 : Parent.Level + 1;
