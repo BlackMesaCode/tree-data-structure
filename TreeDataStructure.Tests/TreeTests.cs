@@ -76,7 +76,7 @@ namespace TreeDataStructure.Tests
         [InlineData("Europe", 1)]
         [InlineData("South America", 2)]
         [InlineData("Paris", 3)]
-        public void Level_ReturnsCorrectCount(string data, int level)
+        public void Level_GivenDifferentNodes_ReturnsCorrectLevel(string data, int level)
         {
             var node = CountryTree.SearchInDescendants(data);
 
@@ -96,6 +96,21 @@ namespace TreeDataStructure.Tests
             }
 
             Assert.Equal(count, 13);
+        }
+
+
+        [Theory]
+        [InlineData("World", false)]
+        [InlineData("Europe", false)]
+        [InlineData("South America", true)]
+        [InlineData("Paris", true)]
+        public void IsLeaf_GivenLeafNodes_ReturnsCorrectValue(string data, bool isLeaf)
+        {
+            Tree<string> node = CountryTree.SearchInDescendants(data);
+            if (data == "World")
+                node = CountryTree;
+            
+            Assert.Equal(node.IsLeaf, isLeaf);
         }
 
     }
